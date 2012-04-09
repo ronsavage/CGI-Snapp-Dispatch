@@ -1,0 +1,57 @@
+{
+   "abstract" : "Dispatch requests to CGI::Snapp-based objects",
+   "author" : [
+      "Ron Savage <ron@savage.net.au>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4, CPAN::Meta::Converter version 2.120630",
+   "license" : [
+      "artistic_1"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "CGI-Snapp-Dispatch",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::More" : "0.94",
+            "Test::Pod" : "1.44"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.38"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "CGI::Snapp" : "1",
+            "Carp" : "1.2",
+            "Class::Load" : "0.18",
+            "Data::Dumper::Concise" : "2.02",
+            "File::Spec" : "0.86",
+            "Hash::FieldHash" : "0.1",
+            "Try::Tiny" : "0.11",
+            "parent" : "0.225",
+            "strict" : "1.03",
+            "version" : "0.96",
+            "warnings" : "1.03"
+         }
+      }
+   },
+   "provides" : {
+      "CGI::Snapp::Dispatch" : {
+         "file" : "lib/CGI/Snapp/Dispatch.pm",
+         "version" : "1.00"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://opensource.org/licenses/artistic-license.php"
+      ]
+   },
+   "version" : "1.00"
+}

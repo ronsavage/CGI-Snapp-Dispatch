@@ -1,0 +1,18 @@
+Build.PL
+Changelog.ini
+CHANGES
+lib/CGI/Snapp/Dispatch.pm
+Makefile.PL
+MANIFEST			This list of files
+META.json
+META.yml
+README
+t/args.t
+t/args.txt
+t/lib/CGI/Snapp/App1.pm
+t/lib/CGI/Snapp/App2.pm
+t/lib/CGI/Snapp/Dispatch/SubClass1.pm
+t/lib/CGI/Snapp/Dispatch/SubClass2.pm
+t/lib/CGI/Snapp/Dispatch/SubClass3.pm
+t/load.t
+t/pod.t
