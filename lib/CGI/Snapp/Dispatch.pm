@@ -18,8 +18,6 @@ use Log::Handler;
 use Try::Tiny;
 
 fieldhash my %logger      => 'logger';
-fieldhash my %maxlevel    => 'maxlevel';
-fieldhash my %minlevel    => 'minlevel';
 fieldhash my %return_type => 'return_type';
 
 our $VERSION = '1.00';
@@ -262,26 +260,9 @@ EOS
 sub _init
 {
 	my($self, $arg)    = @_;
-	$$arg{logger}      ||= defined($$arg{logger}) ? $$arg{logger} : undef; # Caller can set.
-	$$arg{maxlevel}    ||= 'notice'; # Caller can set.
-	$$arg{minlevel}    ||= 'error';  # Caller can set.
-	$$arg{return_type} ||= 0; # Caller can set.
+	$$arg{logger}      ||= ''; # Caller can set.
+	$$arg{return_type} ||= 0;  # Caller can set.
 	$self           = from_hash($self, $arg);
-
-	if (! defined $self -> logger)
-	{
-		$self -> logger(Log::Handler -> new);
-		$self -> logger -> add
-		(
-		 screen =>
-		 {
-			 maxlevel       => $self -> maxlevel,
-			 message_layout => '%m',
-			 minlevel       => $self -> minlevel,
-			 newline        => 1,
-		 }
-		);
-	}
 
 	return $self;
 
@@ -295,7 +276,7 @@ sub log
 
 	croak "Error: No level defined in call to log()\n" if (! defined $level);
 
-	$self -> logger -> $level($s);
+	$self -> logger -> $level($s) if ($self -> logger);
 
 } # End of log.
 
@@ -768,9 +749,24 @@ C<new()> is called as C<< my($app) = CGI::Snapp::Dispatch -> new(k1 => v1, k2 =>
 It returns a new object of type C<CGI::Snapp::Dispatch>.
 
 Key-value pairs accepted in the parameter list (see corresponding methods for details
-[e.g. L</maxlevel([$string])>]):
+[e.g. L</return_type([$string])>]):
 
 =over 4
+
+=item o logger => $aLoggerObject
+
+Specify a logger compatible with L<Log::Handler>.
+
+Note: This logs method calls etc inside CGI::Snapp::Dispatch.
+
+To log within L<CGI::Snapp>, see L</How do I use my own logger object?>.
+
+Default: '' (The empty string).
+
+To clarify: The built-in calls to log() all use a log level of 'debug', so if your logger has 'maxlevel' set
+to anything less than 'debug', nothing nothing will get logged.
+
+'maxlevel' and 'minlevel' are discussed in L<Log::Handler#LOG-LEVELS> and L<Log::Handler::Levels>.
 
 =item o return_type => $integer
 
@@ -1290,6 +1286,13 @@ for named back references (until recent versions of Perl), in the way variable t
 
 =back
 
+=head2 How do I use my own logger object?
+
+Study the sample code in L<CGI::Snapp::Demo::Four>, which shows how to supply a L<Config::Plugin::Tiny> *.ini file to configure the logger via the wrapper class
+L<CGI::Snapp::Demo::Four::Wrapper>.
+
+Also, see any test script, e.g. t/log.t and t/psgi.log.t.
+
 =head2 This module uses Hash::FieldHash, which has an XS component!
 
 Yep.
@@ -1333,9 +1336,12 @@ shell> perl httpd/cgi-bin/cgi.snapp.one.cgi
 
 If that doesn't work, you're in b-i-g trouble. Keep reading for suggestions as to what to do next.
 
-=item o Did you try using a logger?
+=item o Did you try using a logger to trace the method calls?
+
+Pass a logger to your sub-class of L<CGI::Snapp> like this:
 
 	my($logger) = Log::Handler -> new;
+
 	$logger -> add
 		(
 		 screen =>
@@ -1347,6 +1353,16 @@ If that doesn't work, you're in b-i-g trouble. Keep reading for suggestions as t
 		 }
 		);
 	CGI::Snapp::Dispatch -> new -> as_psgi({args_to_new => {logger => $logger} }, ...);
+
+In addition, you can trace CGI::Snapp::Dispatch itself with the same (or a different) logger:
+
+	CGI::Snapp::Dispatch -> new(logger => $logger) -> as_psgi({args_to_new => {logger => $logger} }, ...);
+
+The entry to each method in L<CGI::Snapp> and CGI::Snapp::Dispatch is logged using this technique,
+although only when maxlevel is 'debug'. Lower levels for maxlevel do not trigger logging.
+See the source for details. By 'this technique' I mean there is a statement like this at the entry of each method:
+
+	$self -> log(debug => 'Entered x()');
 
 =item o Are you confused about combining parameters to dispatch() and dispatch_args()?
 

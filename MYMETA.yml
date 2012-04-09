@@ -19,6 +19,7 @@ provides:
     file: lib/CGI/Snapp/Dispatch.pm
     version: 1.00
 requires:
+  CGI::PSGI: 0.15
   CGI::Snapp: 1.01
   Carp: 1.2
   Class::Load: 0.18
