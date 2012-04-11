@@ -11,8 +11,14 @@ t/args.t
 t/args.txt
 t/lib/CGI/Snapp/App1.pm
 t/lib/CGI/Snapp/App2.pm
+t/lib/CGI/Snapp/Dispatch/PSGITest.pm
+t/lib/CGI/Snapp/Dispatch/RunScript.pm
 t/lib/CGI/Snapp/Dispatch/SubClass1.pm
 t/lib/CGI/Snapp/Dispatch/SubClass2.pm
 t/lib/CGI/Snapp/Dispatch/SubClass3.pm
 t/load.t
+t/log.a.pl
+t/log.b.pl
+t/logs.t
 t/pod.t
+t/psgi.args.t
