@@ -651,7 +651,7 @@ CGI::Snapp::Dispatch - Dispatch requests to CGI::Snapp-based objects
 
 =head2 CGI Scripts
 
-Here is a minimal CGI instance script.  I<Note the call to new()!>
+Here is a minimal CGI instance script. I<Note the call to new()!>
 
 	#!/usr/bin/env perl
 
@@ -684,7 +684,7 @@ MyApp/Dispatch.pm:
 		};
 	}
 
-And then you can write myapp.cgi:
+And then you can write ...  I<Note the call to new()!>
 
 	#!/usr/bin/env perl
 
@@ -1365,6 +1365,8 @@ Study the sample code in L<CGI::Snapp::Demo::Four>, which shows how to supply a 
 L<CGI::Snapp::Demo::Four::Wrapper>.
 
 Also, see t/logs.t, t/log.a.pl and t/log.b.pl.
+
+See also L<CGI::Snapp/What else do I need to know about logging?> for important info and sample code.
 
 =head2 This module uses Hash::FieldHash, which has an XS component!
 
