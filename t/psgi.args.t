@@ -27,8 +27,7 @@ sub test_1
 	};
 
 	$$env{REQUEST_URI} = "$$env{SCRIPT_NAME}$$env{PATH_INFO}?$$env{QUERY_STRING}";
-	my($app)           = CGI::Snapp::Dispatch -> new;
-	my($psgi)          = $app -> as_psgi;
+	my($psgi)          = CGI::Snapp::Dispatch -> new -> as_psgi;
 
 	ok(ref $psgi eq 'CODE', 'as_psgi() returns a coderef');
 

@@ -9,8 +9,6 @@ use CGI::PSGI;
 
 use Class::Load ':all';
 
-use Data::Dumper::Concise;
-
 use Hash::FieldHash ':all';
 
 use HTTP::Exception;
@@ -652,13 +650,15 @@ CGI::Snapp::Dispatch - Dispatch requests to CGI::Snapp-based objects
 
 =head2 CGI Scripts
 
-A minimal CGI instance script would be:
+Here is a minimal CGI instance script.  I<Note the call to new()!>
 
 	#!/usr/bin/env perl
 
 	use CGI::Snapp::Dispatch;
 
-	CGI::Snapp::Dispatch -> dispatch;
+	CGI::Snapp::Dispatch -> new -> dispatch;
+
+(The use of new() is discussed in detail under L</PSGI Scripts>, just below.)
 
 But, to override the default dispatch table, you probably want something like this:
 
@@ -689,9 +689,59 @@ And then you can write myapp.cgi:
 
 	use MyApp::Dispatch;
 
-	MyApp::Dispatch -> dispatch;
+	MyApp::Dispatch -> new -> dispatch;
 
 =head2 PSGI Scripts
+
+Here is a PSGI script in production on my development machine. I<Note the call to new()!>
+
+	#!/usr/bin/env perl
+	#
+	# Run with:
+	# starman -l 127.0.0.1:5020 --workers 1 httpd/cgi-bin/local/wines.psgi &
+	# or, for more debug output:
+	# plackup -l 127.0.0.1:5020 httpd/cgi-bin/local/wines.psgi &
+
+	use strict;
+	use warnings;
+
+	use CGI::Snapp::Dispatch;
+
+	use Plack::Builder;
+
+	# ---------------------
+
+	my($app) = CGI::Snapp::Dispatch -> new -> as_psgi
+	(
+		prefix => 'Local::Wines::Controller', # A sub-class of CGI::Snapp.
+		table  =>
+		[
+		''              => {app => 'Initialize', rm => 'display'},
+		':app'          => {rm => 'display'},
+		':app/:rm/:id?' => {},
+		],
+	);
+
+	builder
+	{
+		enable "ContentLength";
+		enable "Static",
+		path => qr!^/(assets|favicon|yui)!,
+		root => '/dev/shm/html'; # /dev/shm/ is Debian's RAM disk.
+		$app;
+	};
+
+I<Warning!> The line my($app) = ... contains a call to L</new()>. This is definitely not the same as if you
+were using L<CGI::Application::Dispatch> or L<CGI::Application::Dispatch::PSGI>. They look like this:
+
+	my($app) = CGI::Application::Dispatch -> as_psgi
+
+The lack of a call to new() there tells you I've implemented something very similar but different.
+You have been warned...
+
+The point of this difference is that new() returns an object, and passing that into L</as_psgi(@args)> as $self
+allows the latter method to be much more sophisticated than it would otherwise be. Specifically, it can now share
+a lot of code with L</dispatch(@args)>.
 
 =head1 Description
 
@@ -1036,15 +1086,22 @@ Examples:
 
 =head2 What is 'path info'?
 
-It is just $ENV{PATH_INFO}. The value of $ENV{PATH_INFO} is normally set by the web server from the path
-info sent by the HTTP client.
+For a L<CGI> script, it is just $ENV{PATH_INFO}. The value of $ENV{PATH_INFO} is normally set by the web server
+from the path info sent by the HTTP client.
 
 A request to /cgi-bin/x.cgi/path/info will set $ENV{PATH_INFO} to /path/info.
 
 For Apache, whether $ENV{PATH_INFO} is set or not depends on the setting of the
 L<AcceptPathInfo|http://httpd.apache.org/docs/current/mod/core.html#acceptpathinfo> directive.
 
+For a L<PSGI|http://plackperl.org/> script, it is $$env{PATH_INFO}, within the $env hashref provided by PSGI.
+
 Path info is also discussed in L<CGI::Snapp/mode_param([@new_options])>.
+
+Similar comments apply to the request method (GET, PUT etc) which may be used in rules.
+
+For CGI scripts, request method comes from $ENV{HTTP_REQUEST_METHOD} || $ENV{REQUEST_METHOD}, whereas for PSGI
+scripts it is just $$env{REQUEST_METHOD}.
 
 =head2 Is there any sample code?
 
@@ -1162,7 +1219,7 @@ in (probably) sub setup(), shows how to separate run mode names from method name
 
 Sometimes it's easiest to explain with an example, so here you go:
 
-	CGI::Snapp::Dispatch -> dispatch
+	CGI::Snapp::Dispatch -> new -> dispatch # Note the new()!
 	(
 		args_to_new =>
 		{
