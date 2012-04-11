@@ -9,6 +9,8 @@ use CGI::PSGI;
 
 use Class::Load ':all';
 
+use Data::Dumper::Concise;
+
 use Hash::FieldHash ':all';
 
 use HTTP::Exception;
@@ -42,8 +44,9 @@ sub as_psgi
 	return
 		sub
 		{
-			my($env)        = @_;
-			my($named_args) = $self -> _parse_path($self -> _clean_path($$env{PATH_INFO}, $args), $$args{table});
+			my($env)         = shift @_;
+			my($http_method) = $$env{REQUEST_METHOD};
+			my($named_args)  = $self -> _parse_path($http_method, $self -> _clean_path($$env{PATH_INFO}, $args), $$args{table});
 
 			HTTP::Exception -> throw(404, status_message => 'Not Found') if (! $$named_args{app});
 			HTTP::Exception -> throw(400, status_message => "Invalid characters in run mode name '$$named_args{rm}'") if ($$named_args{rm} && ($$named_args{rm} !~ m/^([a-zA-Z_][\w\']+)$/) );
@@ -54,7 +57,7 @@ sub as_psgi
 
 			try
 			{
-				my($module, $rm, $args_to_new) = $self -> _prepare($ENV{HTTP_REQUEST_METHOD} || $ENV{REQUEST_METHOD}, $args, $named_args);
+				my($module, $rm, $args_to_new) = $self -> _prepare($http_method, $args, $named_args);
 				$$args_to_new{_psgi}           = 1; # Required.
 				$$args_to_new{QUERY}           = CGI::PSGI -> new($env) if (! $$args_to_new{QUERY});
 				my($app)                       = $module -> new(%$args_to_new);
@@ -122,7 +125,8 @@ sub dispatch
 
 	try
 	{
-		my($named_args) = $self -> _parse_path($self -> _clean_path($ENV{PATH_INFO}, $args), $$args{table});
+		my($http_method) = $ENV{HTTP_REQUEST_METHOD} || $ENV{REQUEST_METHOD};
+		my($named_args)  = $self -> _parse_path($http_method, $self -> _clean_path($ENV{PATH_INFO}, $args), $$args{table});
 
 		croak 404 if (! $$named_args{app});
 		croak 400 if ($$named_args{rm} && ($$named_args{rm} !~ m/^([a-zA-Z_][\w\']+)$/) );
@@ -140,7 +144,7 @@ sub dispatch
 			# If run() croaks, _http_error() uses error number 500,
 			# because the error message will not match /^\d+$/.
 
-			my($module, $rm, $args_to_new) = $self -> _prepare($ENV{HTTP_REQUEST_METHOD} || $ENV{REQUEST_METHOD}, $args, $named_args);
+			my($module, $rm, $args_to_new) = $self -> _prepare($http_method, $args, $named_args);
 			my($app) = $module -> new(%$args_to_new);
 
 			$app -> mode_param(sub {return $rm}) if ($rm);
@@ -455,16 +459,13 @@ sub _parse_error_document
 
 sub _parse_path
 {
-	my($self, $path_info, $table) = @_;
+	my($self, $http_method, $path_info, $table) = @_;
 
 	$self -> log(debug => "_parse_path($path_info, ...)");
 
 	# Compare each rule in the table with the path_info, and process the 1st match.
 
-	my($request_method) = $ENV{HTTP_REQUEST_METHOD} || $ENV{REQUEST_METHOD};
-
-	my($http_method_regexp, $http_method);
-	my($rule);
+	my($request_method_regexp, $rule);
 
 	for (my $i = 0; $i < scalar @$table; $i += 2)
 	{
@@ -477,21 +478,19 @@ sub _parse_path
 		# Firstly, look for a HTTP method name in the rule,
 		# as something like ':app/news[post]' => {rm => 'add_news'}.
 
-		$http_method_regexp = qr/\[([^\]]+)\]$/;
+		$request_method_regexp = qr/\[([^\]]+)\]$/;
 
-		if ($rule =~ /$http_method_regexp/)
+		if ($rule =~ /$request_method_regexp/)
 		{
-			$http_method = $1;
+			# If the method doesn't match the rule can't possibly match.
 
-			# Skip this rule if the method doesn't match.
-
-			next if (lc $http_method ne lc $request_method);
+			next if (lc $http_method ne lc $1);
 
 			$self -> log(debug => "Matched HTTP method '$http_method'");
 
 			# Remove the method portion from the rule.
 
-			$rule =~ s/$http_method_regexp//;
+			$rule =~ s/$request_method_regexp//;
 		}
 
 		# Standardize the format of the rule, to match the standardized path info.
@@ -569,14 +568,30 @@ sub _prepare
 	# If another name for dispatch_url_remainder has been set, move the value to the requested name.
 
 	if ($$named_args{'*'})
-			{
+	{
 		$$named_args{$$named_args{'*'} } = $$named_args{'dispatch_url_remainder'};
 
 		delete $$named_args{'*'};
 		delete $$named_args{'dispatch_url_remainder'};
 	}
 
-	$args_to_new   ||= $$args{args_to_new};
+	# Warning: The following statement was copied from CGI::Application::Dispatch,
+	# but it does not do what you think, due to the way Perl equivalences hashrefs.
+	# The symptom is that up at line 62:
+	# $$args_to_new{QUERY} = CGI::PSGI -> new($env) if (! $$args_to_new{QUERY});
+	# it has the effect of setting $args{args_to_new}, and not just $args_to_new.
+	# That means the 'if (! $$args_to_new{QUERY})' stops a new CGI::PSGI being assigned
+	# during each call of the subref, so the initial CGI::PSGI object is preserved,
+	# and of course it has no CGI parameters, so no parameters are ever received :-(.
+
+	#$args_to_new ||= $$args{args_to_new};
+
+	if (! $args_to_new)
+	{
+		my(%new_args) = %{$$args{args_to_new} };
+		$args_to_new  = {%new_args};
+	}
+
 	@{$$args_to_new{PARAMS} }{keys %$named_args} = values %$named_args;
 	$args_to_new   = {} if (! $args_to_new);
 	$module        = $self -> translate_module_name($module);
@@ -1399,6 +1414,16 @@ This triggers the use of sprintf to merge the error number into the string.
 =item o Are you trying to use this module with an app non based on CGI::Snapp?
 
 Remember that L<CGI::Snapp>'s new() takes a hash, not a hashref.
+
+=item o Did you get the mysterious error 'No such field "priority"'?
+
+You did this:
+
+	as_psgi(args_to_new => $logger, ...)
+
+instead of this:
+
+	as_psgi(args_to_new => {logger => $logger, ...}, ...)
 
 =item o The system Perl 'v' perlbrew
 
