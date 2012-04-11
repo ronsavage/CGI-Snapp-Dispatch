@@ -27,16 +27,17 @@
       },
       "runtime" : {
          "requires" : {
-            "CGI::Snapp" : "1",
+            "CGI::PSGI" : "0.15",
+            "CGI::Snapp" : "1.01",
             "Carp" : "1.2",
             "Class::Load" : "0.18",
-            "Data::Dumper::Concise" : "2.02",
             "File::Spec" : "0.86",
+            "HTTP::Exception" : "0.04001",
             "Hash::FieldHash" : "0.1",
+            "Log::Handler" : "0.75",
             "Try::Tiny" : "0.11",
             "parent" : "0.225",
             "strict" : "1.03",
-            "version" : "0.96",
             "warnings" : "1.03"
          }
       }
