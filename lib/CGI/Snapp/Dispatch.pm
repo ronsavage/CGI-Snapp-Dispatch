@@ -82,6 +82,7 @@ sub as_psgi
 sub _clean_path
 {
 	my($self, $path_info, $args) = @_;
+	$path_info = '' if (! defined $path_info || length $path_info == 0);
 
 	$self -> log(debug => "_clean_path($path_info, ...)");
 
@@ -1363,7 +1364,7 @@ for named back references (until recent versions of Perl), in the way variable t
 Study the sample code in L<CGI::Snapp::Demo::Four>, which shows how to supply a L<Config::Plugin::Tiny> *.ini file to configure the logger via the wrapper class
 L<CGI::Snapp::Demo::Four::Wrapper>.
 
-Also, see any test script, e.g. t/log.t and t/psgi.log.t.
+Also, see t/logs.t, t/log.a.pl and t/log.b.pl.
 
 =head2 This module uses Hash::FieldHash, which has an XS component!
 

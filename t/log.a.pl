@@ -27,6 +27,8 @@ sub test_1
 		 }
 		);
 
+	# Pass logger to CGI::Snapp::Dispatch, not CGI::Snapp.
+
 	my($app)  = CGI::Snapp::Dispatch -> new(logger => $logger);
 	my($html) = $app -> dispatch;
 
