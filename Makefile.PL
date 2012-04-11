@@ -24,6 +24,7 @@ WriteMakefile
  PL_FILES  => {},
  PREREQ_PM =>
  {
+	Capture::Tiny   => 0.16,
 	Carp            => 1.20,
 	CGI::PSGI       => 0.15,
 	CGI::Snapp      => 1.01,
@@ -31,8 +32,10 @@ WriteMakefile
 	File::Spec      => 0.86,
 	Hash::FieldHash => 0.10,
 	HTTP::Exception => 0.04001,
+	IO::Pipe        => 1.14,
 	Log::Handler    => 0.75,
 	parent          => 0.225,
+	Proc::Fork      => 0.71,
 	strict          => 1.03,
 	Test::More      => 0.94,
 	Test::Pod       => 1.44,
