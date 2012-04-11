@@ -528,7 +528,7 @@ sub _parse_path
 
 		$self -> log(debug => "Rule is now   '$rule'");
 		$self -> log(debug => "Names in rule [" . join(', ', @names) . ']');
-		$self -> log(debug => "Trying to match '$path_info' against rule '$$table[$i]' using regexp '$rule'");
+		$self -> log(debug => "Trying to match path info '$path_info' against rule '$$table[$i]' using regexp '$rule'");
 
 		# If we find a match, then run with it.
 
@@ -743,6 +743,8 @@ You have been warned...
 The point of this difference is that new() returns an object, and passing that into L</as_psgi(@args)> as $self
 allows the latter method to be much more sophisticated than it would otherwise be. Specifically, it can now share
 a lot of code with L</dispatch(@args)>.
+
+Lastly, if you want to use regexps to match the path info, see L<CGI::Snapp::Dispatch::Regexp>.
 
 =head1 Description
 
@@ -1503,6 +1505,8 @@ L<http://www.perlmonks.org/?node_id=380424>.
 L<CGI::Snapp> - A almost back-compat fork of CGI::Application.
 
 As of V 1.01, L<CGI::Snapp> now supports L<PSGI|http://plackperl.org/>-style apps.
+
+And see L<CGI::Snapp::Dispatch::Regexp> for another way of matching the path info.
 
 =head1 Machine-Readable Change Log
 
