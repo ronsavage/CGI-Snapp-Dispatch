@@ -4,8 +4,6 @@ use warnings;
 
 use CGI::Snapp::Dispatch;
 
-use Data::Dumper::Concise;
-
 use Log::Handler;
 
 use Test::More;
