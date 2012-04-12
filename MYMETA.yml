@@ -18,6 +18,9 @@ provides:
   CGI::Snapp::Dispatch:
     file: lib/CGI/Snapp/Dispatch.pm
     version: 1.00
+  CGI::Snapp::Dispatch::Regexp:
+    file: lib/CGI/Snapp/Dispatch/Regexp.pm
+    version: 1.00
 requires:
   CGI::PSGI: 0.15
   CGI::Snapp: 1.01
