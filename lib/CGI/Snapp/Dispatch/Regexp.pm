@@ -48,10 +48,6 @@ sub _parse_path
 
 		next if (! defined $rule);
 
-		$self -> log(debug => "Original rule '$rule'");
-
-		my(@names);
-
 		$self -> log(debug => "Trying to match path info '$path_info' against rule '$rule'");
 
 		# If we find a match, then run with it.
@@ -60,9 +56,9 @@ sub _parse_path
 		{
 			$self -> log(debug => 'Matched!');
 
-			my(%named_args)     = %{$$table[++$i]};
-			my($names}          = delete $named_args{names};
-			@named_args{@names} = @values if (ref $names eq 'ARRAY');
+			my(%named_args)      = %{$$table[++$i]};
+			my($names)           = delete $named_args{names};
+			@named_args{@$names} = @values if (ref $names eq 'ARRAY');
 
 			return {%named_args};
 		}
@@ -103,12 +99,16 @@ I<Note the call to new()!>
 		],
 	);
 
-This would also work with:
+This would also work in a PSGI context. I<Note the call to new()!>
 
 	CGI::Snapp::Dispatch::Regexp -> new -> as_psgi
 	(
 	...
 	);
+
+See t/psgi.regexp.t and t/regexp.t.
+
+This usage of new(), so unlike L<CGI::Application::Dispatch>, is dicussed in L<CGI::Snapp::Dispatch/PSGI Scripts>.
 
 =head1 Description
 
@@ -194,11 +194,17 @@ The differences between this structure and what's used by L<CGI::Snapp::Dispatch
 
 =head1 FAQ
 
+=head2 Is there any sample code?
+
+Yes. See t/psgi.regexp.t and t/regexp.t.
+
+This module works with both L<CGI::Snapp::Dispatch/dispatch(@args)> and L<CGI::Snapp::Dispatch/as_psgi(@args)>.
+
 =head2 What is the structure of the dispatch table?
 
 Basically it's the same as in L<CGI::Snapp::Dispatch/What is the structure of the dispatch table?>.
 
-The important difference is in the I<table> key, which can be seen just above, under L</ dispatch_args($args)>.
+The important difference is in the I<table> key, which can be seen just above, under L</dispatch_args($args)>.
 
 The pairs of elements in the I<table>, compared to what's handled by L<CGI::Snapp::Dispatch> are:
 
