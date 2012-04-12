@@ -25,12 +25,12 @@ Original rule ':app'
 Rule is now   '/:app/'
 Rule is now   '/([^/]*)/'
 Names in rule [app]
-Trying to match '/' against rule ':app' using regexp '/([^/]*)/'
+Trying to match path info '/' against rule ':app' using regexp '/([^/]*)/'
 Original rule ':app/:rm'
 Rule is now   '/:app/:rm/'
 Rule is now   '/([^/]*)/([^/]*)/'
 Names in rule [app, rm]
-Trying to match '/' against rule ':app/:rm' using regexp '/([^/]*)/([^/]*)/'
+Trying to match path info '/' against rule ':app/:rm' using regexp '/([^/]*)/([^/]*)/'
 Nothing matched
 _http_error(..., 404)
 Processing HTTP error 404
