@@ -19,8 +19,7 @@ Module::Build -> new
  {
 	Capture::Tiny   => 0.16,
 	Carp            => 1.20,
-	CGI::PSGI       => 0.15,
-	CGI::Snapp      => 1.01,
+	CGI::Snapp      => 1.02,
 	Class::Load     => 0.18,
 	File::Spec      => 0.86,
 	Hash::FieldHash => 0.10,

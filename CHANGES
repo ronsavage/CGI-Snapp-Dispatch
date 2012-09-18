@@ -1,4 +1,9 @@
 Revision history for Perl extension CGI::Snapp::Dispatch.
 
+1.01  Tue Sep 18 11:23:00 2012
+	- Make CGI::Snapp V 1.02 the pre-req, up from V 1.01.
+	- Remove CGI::PSGI from the pre-reqs, now that it's properly a pre-req for CGI::Snapp, as it should
+		have been all along.
+
 1.00  Sun Apr  8 10:40:00 2012
 	  - Original version
