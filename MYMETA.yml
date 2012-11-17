@@ -22,7 +22,7 @@ provides:
     file: lib/CGI/Snapp/Dispatch/Regexp.pm
     version: 1.01
 requires:
-  CGI::Snapp: 1.02
+  CGI::Snapp: 1.03
   Capture::Tiny: 0.16
   Carp: 1.2
   Class::Load: 0.18

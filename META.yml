@@ -17,12 +17,12 @@ name: CGI-Snapp-Dispatch
 provides:
   CGI::Snapp::Dispatch:
     file: lib/CGI/Snapp/Dispatch.pm
-    version: 1.01
+    version: 1.02
   CGI::Snapp::Dispatch::Regexp:
     file: lib/CGI/Snapp/Dispatch/Regexp.pm
-    version: 1.01
+    version: 1.02
 requires:
-  CGI::Snapp: 1.02
+  CGI::Snapp: 1.03
   Capture::Tiny: 0.16
   Carp: 1.2
   Class::Load: 0.18
@@ -38,4 +38,4 @@ requires:
   warnings: 1.03
 resources:
   license: http://www.perlfoundation.org/artistic_license_1_0
-version: 1.01
+version: 1.02
