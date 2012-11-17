@@ -8,7 +8,7 @@ use Carp;
 
 use Hash::FieldHash ':all';
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 # --------------------------------------------------
 

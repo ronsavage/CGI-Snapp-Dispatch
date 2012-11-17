@@ -4,6 +4,8 @@ use warnings;
 
 use CGI::Snapp::RunScript;
 
+use File::Spec;
+
 use Test::More;
 
 # ------------------------------------------------
@@ -95,7 +97,7 @@ EOS
 my($runner) = CGI::Snapp::RunScript -> new;
 my($count)  = 0;
 
-$count += test_a($runner, 't/log.a.pl');
-$count += test_b($runner, 't/log.b.pl');
+$count += test_a($runner, File::Spec -> catfile('t', 'log.a.pl') );
+$count += test_b($runner, File::Spec -> catfile('t', 'log.b.pl') );
 
 done_testing($count);
