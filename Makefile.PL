@@ -21,6 +21,7 @@ WriteMakefile
  },
  DISTNAME  => 'CGI-Snapp-Dispatch',
  NAME      => 'CGI::Snapp::Dispatch',
+	LICENSE   => 'perl_5',
  PL_FILES  => {},
  PREREQ_PM =>
  {
