@@ -3,7 +3,7 @@ use Module::Build;
 Module::Build -> new
 (
  module_name    => 'CGI::Snapp::Dispatch',
- license        => 'perl_5',
+ license        => 'artistic_2',
  dist_abstract  => 'Dispatch requests to CGI::Snapp-based objects',
  dist_author    => 'Ron Savage <ron@savage.net.au>',
  build_requires =>
