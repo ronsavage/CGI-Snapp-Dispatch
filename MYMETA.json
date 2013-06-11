@@ -26,7 +26,7 @@
       },
       "runtime" : {
          "requires" : {
-            "CGI::Snapp" : "1.03",
+            "CGI::Snapp" : "1.04",
             "Capture::Tiny" : "0.16",
             "Carp" : "1.2",
             "Class::Load" : "0.18",
