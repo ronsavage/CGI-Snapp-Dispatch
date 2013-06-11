@@ -1,6 +1,6 @@
 Build.PL
 Changelog.ini
-CHANGES
+Changes
 lib/CGI/Snapp/Dispatch.pm
 lib/CGI/Snapp/Dispatch/Regexp.pm
 Makefile.PL

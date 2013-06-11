@@ -2,7 +2,7 @@ use lib 't/lib';
 use strict;
 use warnings;
 
-use CGI::Snapp::RunScript;
+use CGI::Snapp::Dispatch::RunScript;
 
 use File::Spec;
 
@@ -94,7 +94,7 @@ EOS
 
 # ------------------------------------------------
 
-my($runner) = CGI::Snapp::RunScript -> new;
+my($runner) = CGI::Snapp::Dispatch::RunScript -> new;
 my($count)  = 0;
 
 $count += test_a($runner, File::Spec -> catfile('t', 'log.a.pl') );

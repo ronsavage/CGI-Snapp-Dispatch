@@ -20,7 +20,7 @@ use Try::Tiny;
 fieldhash my %logger      => 'logger';
 fieldhash my %return_type => 'return_type';
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 # --------------------------------------------------
 
