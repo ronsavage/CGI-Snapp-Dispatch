@@ -6,7 +6,7 @@ use CGI::Snapp::Dispatch::RunScript;
 
 use File::Spec;
 
-use test::Deep;
+use Test::Deep;
 use Test::More;
 
 # ------------------------------------------------
