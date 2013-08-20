@@ -6,6 +6,7 @@ use CGI::Snapp::Dispatch::RunScript;
 
 use File::Spec;
 
+use test::Deep;
 use Test::More;
 
 # ------------------------------------------------
@@ -44,7 +45,7 @@ EOS
 
 	ok($#$output >= 0, "$script returned real data from dispatch()");
 
-	is_deeply($output, \@expect, "$script returned the correct log content from dispatch()");
+	cmp_deeply($output, \@expect, "$script returned the correct log content from dispatch()");
 
 	return 2;
 
@@ -86,7 +87,7 @@ EOS
 
 	ok($#$output >= 0, "$script returned real data from as_psgi()");
 
-	is_deeply($output, \@expect, "$script returned the correct log content from as_psgi()");
+	cmp_deeply($output, \@expect, "$script returned the correct log content from as_psgi()");
 
 	return 2;
 

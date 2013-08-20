@@ -4,6 +4,7 @@ use warnings;
 
 use CGI::Snapp::Dispatch::Regexp;
 
+use Test::Deep;
 use Test::More;
 
 # ------------------------------------------------
@@ -33,7 +34,7 @@ sub test_1
 
 	my($output) = $psgi -> ($env);
 
-	is_deeply
+	cmp_deeply
 	(
 	$output,
 	[
