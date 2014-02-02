@@ -4,7 +4,7 @@
       "Ron Savage <ron@savage.net.au>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Module::Build version 0.4005, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "Module::Build version 0.4204",
    "license" : [
       "artistic_2"
    ],
@@ -16,6 +16,7 @@
    "prereqs" : {
       "build" : {
          "requires" : {
+            "Test::Deep" : "0.11",
             "Test::More" : "0.94"
          }
       },
@@ -37,6 +38,7 @@
             "Log::Handler" : "0.75",
             "Proc::Fork" : "0.71",
             "Try::Tiny" : "0.11",
+            "lib" : "0",
             "parent" : "0.225",
             "strict" : "1.03",
             "warnings" : "1.03"
