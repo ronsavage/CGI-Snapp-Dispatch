@@ -48,11 +48,11 @@
    "provides" : {
       "CGI::Snapp::Dispatch" : {
          "file" : "lib/CGI/Snapp/Dispatch.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       },
       "CGI::Snapp::Dispatch::Regexp" : {
          "file" : "lib/CGI/Snapp/Dispatch/Regexp.pm",
-         "version" : "1.04"
+         "version" : "1.05"
       }
    },
    "release_status" : "stable",
@@ -61,5 +61,5 @@
          "http://www.perlfoundation.org/artistic_license_2_0"
       ]
    },
-   "version" : "1.04"
+   "version" : "1.05"
 }
