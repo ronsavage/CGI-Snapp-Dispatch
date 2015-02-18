@@ -1,5 +1,8 @@
 Revision history for Perl extension CGI::Snapp::Dispatch.
 
+1.05  Wed Feb 18 16:32:00 2015
+	- Rename CHANGES to Changes.
+
 1.04  Tue Aug 20 12:49:00 2013
 	- Switch from Test::More.is_deeply() to Test::Deep.cmp_deeply().
 		This is to avoid hash key randomization issues.
