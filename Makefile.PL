@@ -31,6 +31,7 @@ my(%params) =
 	{
 		'Capture::Tiny'		=> 0.44,
 		'Carp'				=> 1.20,
+		'CGI::PSGI'			=> 0.15,
 		'CGI::Snapp'		=> 2.01,
 		'Class::Load'		=> 0.23,
 		'File::Spec'		=> 3.40,

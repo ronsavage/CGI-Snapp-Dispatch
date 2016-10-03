@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use script;
+use strict;
 use warnings;
 
 use Test::More;
