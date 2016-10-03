@@ -1507,6 +1507,10 @@ Version numbers < 1.00 represent development versions. From 1.00 up, they are pr
 Please read L<CGI::Application::Dispatch/CONTRIBUTORS>, since this module is a fork of the non-Apache
 components of L<CGI::Application::Dispatch>.
 
+=head1 Repository
+
+L<https://github.com/ronsavage/CGI-Snapp-Dispatch>
+
 =head1 Support
 
 Email the author, or log a bug on RT:
