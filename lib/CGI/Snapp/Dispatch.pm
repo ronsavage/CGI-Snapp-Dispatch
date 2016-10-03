@@ -1356,12 +1356,6 @@ Also, see t/logs.t, t/log.a.pl and t/log.b.pl.
 
 See also L<CGI::Snapp/What else do I need to know about logging?> for important info and sample code.
 
-=head2 This module uses Hash::FieldHash, which has an XS component!
-
-Yep.
-
-My policy is that stand-alone modules should use a light-weight object manager (my choice is L<Hash::FieldHash>), whereas apps can - and probably should - use L<Moose>.
-
 =head2 How do I sub-class CGI::Snapp::Dispatch?
 
 You do this the same way you sub-class L<CGI::Snapp>. See L<this FAQ entry in CGI::Snapp|CGI::Snapp#How-do-I-sub-class-CGI::Snapp->.
