@@ -9,18 +9,29 @@ use CGI::PSGI;
 
 use Class::Load ':all';
 
-use Hash::FieldHash ':all';
-
 use HTTP::Exception;
 
 use Log::Handler;
 
+use Moo;
+
 use Try::Tiny;
 
-fieldhash my %logger      => 'logger';
-fieldhash my %return_type => 'return_type';
+has logger =>
+(
+	is       => 'rw',
+	default  => sub{return ''},
+	required => 0,
+);
 
-our $VERSION = '1.05';
+has return_type =>
+(
+	is       => 'rw',
+	default  => sub{return 0},
+	required => 0,
+);
+
+our $VERSION = '2.00';
 
 # --------------------------------------------------
 
@@ -260,19 +271,6 @@ EOS
 
 # --------------------------------------------------
 
-sub _init
-{
-	my($self, $arg)    = @_;
-	$$arg{logger}      ||= ''; # Caller can set.
-	$$arg{return_type} ||= 0;  # Caller can set.
-	$self           = from_hash($self, $arg);
-
-	return $self;
-
-} # End of _init.
-
-# --------------------------------------------------
-
 sub log
 {
 	my($self, $level, $s) = @_;
@@ -379,18 +377,6 @@ sub _merge_args
 	return $final_args;
 
 }	# End of _merge_args.
-
-# --------------------------------------------------
-
-sub new
-{
-	my($class, %arg) = @_;
-	my($self)        = bless {}, $class;
-	$self            = $self -> _init(\%arg);
-
-	return $self;
-
-}	# End of new.
 
 # --------------------------------------------------
 

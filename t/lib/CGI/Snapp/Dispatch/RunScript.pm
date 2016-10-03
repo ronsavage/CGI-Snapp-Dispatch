@@ -11,7 +11,7 @@ use IO::Pipe;
 
 use Proc::Fork;
 
-our $VERSION = '1.05';
+our $VERSION = '2.00';
 
 # --------------------------------------------------
 
@@ -27,33 +27,23 @@ sub new
 
 sub run_script
 {
-	my($self, $script) = @_;
-	my($pipe) = IO::Pipe -> new;
+	my($self, $script)	= @_;
+	my($cmd)			= "$^X -Ilib $script";
 
 	my(@stack);
 
-	run_fork
 	{
-		parent
-		{
-			my($child) = @_;
+		no warnings; # Stops insecure PATH & dependency warnings...
 
-			waitpid $child, 0;
-			$pipe -> reader;
-			push @stack, $_ while <$pipe>;
-		}
-		child
+		open(PIPE, "-|", $cmd) || croak "Pipe died while testing script $script. \n";
+
+		while (my $line = <PIPE>)
 		{
-			my($stdout, $stderr, @result) = capture{system($^X, $script)};
-			$pipe -> writer;
-			print $pipe $stdout;
-			exit;
+			push @stack, $line;
 		}
-		error
-		{
-			croak "Testing script $script\n";
-		}
-	};
+
+		close(PIPE);
+	}
 
 	return [@stack];
 

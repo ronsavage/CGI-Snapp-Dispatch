@@ -1,3 +1,5 @@
+#!/usr/bin/env perl
+
 use lib 't/lib';
 use strict;
 use warnings;
@@ -10,6 +12,7 @@ use Test::Deep;
 use Test::More;
 
 # ------------------------------------------------
+
 sub test_a
 {
 	my($runner, $script)  = @_;
@@ -52,6 +55,7 @@ EOS
 } # End of test_a.
 
 # ------------------------------------------------
+
 sub test_b
 {
 	my($runner, $script) = @_;

@@ -6,9 +6,7 @@ use warnings;
 
 use Carp;
 
-use Hash::FieldHash ':all';
-
-our $VERSION = '1.05';
+our $VERSION = '2.00';
 
 # --------------------------------------------------
 

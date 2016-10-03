@@ -1,5 +1,17 @@
 Revision history for Perl extension CGI::Snapp::Dispatch.
 
+2.00  2016-09-04T12:10:00
+	- Hash::FieldHash has been replaced by Moo.
+		By default Moo has no XS. And since Hash::FieldHash had an XS component, this switch to Moo
+		may help some users there too.
+		Also note, from the Moo docs: 'If a new enough version of Class::XSAccessor is available,
+		it will be used ...'.
+	- Adopt new repo structure. This includes changing the licence from Artistic to Perl. See
+		http://savage.net.au/Ron/html/My.Workflow.for.Building.Distros.html.
+	- Adopt patch to t/lib/CGI/Snapp/Dispatch/RunScript from twata. See RT#81241. With thanx.
+		V 2.00 is being released because this new version of RunScript.pm was inserted into
+		CGI::Snapp but not into CGI::Snapp::Dispatch at the same time. See RT#118198 and RT#118198.
+
 1.05  Wed Feb 18 16:32:00 2015
 	- Rename CHANGES to Changes.
 
@@ -19,8 +31,8 @@ Revision history for Perl extension CGI::Snapp::Dispatch.
 
 1.01  Tue Sep 18 11:23:00 2012
 	- Make CGI::Snapp V 1.02 the pre-req, up from V 1.01.
-	- Remove CGI::PSGI from the pre-reqs, now that it's properly a pre-req for CGI::Snapp, as it should
-		have been all along.
+	- Remove CGI::PSGI from the pre-reqs, now that it's properly a pre-req for CGI::Snapp, as it
+		should have been all along.
 
 1.00  Sun Apr  8 10:40:00 2012
 	  - Original version
